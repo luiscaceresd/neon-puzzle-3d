@@ -109,6 +109,7 @@ namespace StarterAssets
         private const float _threshold = 0.01f;
 
         private bool _hasAnimator;
+        public GameObject body;
 
         private bool IsCurrentDeviceMouse
         {
@@ -159,6 +160,11 @@ namespace StarterAssets
             JumpAndGravity();
             GroundedCheck();
             Move();
+
+            if (Input.GetMouseButtonDown(0)) //
+            {
+                body.transform.Rotate(0f, 90f, 0);
+            }
         }
 
         private void LateUpdate()
@@ -386,6 +392,15 @@ namespace StarterAssets
             if (animationEvent.animatorClipInfo.weight > 0.5f)
             {
                 AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(_controller.center), FootstepAudioVolume);
+            }
+        }
+
+        //if characer falls off the map, restart the game
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.CompareTag("Death"))
+            {
+                GameManager.gmInstance.RestartGame();
             }
         }
 
